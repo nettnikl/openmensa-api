@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import json
-import os
+from urllib.parse import urljoin
 
 try:
     from urllib.parse import urlparse, urlencode
@@ -15,20 +15,20 @@ except ImportError:
 class OpenMensa:
     """Python wrapper for OpenMensa API v2"""
 
-    __ENDPOINT = 'http://openmensa.org/api/v2'
+    __ENDPOINT = 'http://openmensa.org/api/v2/'
 
     @staticmethod
     def __make_json_request(path, params=None):
-        url = os.path.join(
+        url = urljoin(
             OpenMensa.__ENDPOINT,
             path
         )
 
-        param_string = '?'
         if params:
-            param_string += urlencode(params)
+            url += '?' + urlencode(params)
+
         req = urlopen(
-            url + param_string
+            url
         )
 
         return json.loads(
